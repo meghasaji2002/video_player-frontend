@@ -10,6 +10,7 @@ import { Row,Col } from 'react-bootstrap';
 import VideoCard from './VideoCard';
 
 function Category() {
+const[deleteCategoryVideoStatus,setDeleteCategoryVideoStatus] = useState(false)
 
   const [categoryName,setCategoryName]=useState("")
   const [category,setCategory] = useState([])
@@ -67,7 +68,8 @@ function Category() {
 
    useEffect(()=>{
     allCategory()
-   },[])
+    setDeleteCategoryVideoStatus(false)
+   },[deleteCategoryVideoStatus])
 
   const [show, setShow] = useState(false);
 
@@ -107,16 +109,16 @@ function Category() {
 
     {category?.length>0?
     category?.map((item)=>( <div className='m-5 border border-secondary p-3 rounded'>
-    <div className='d-flex justify-content-between align-items-center' droppable onDragOver={(e)=>dragOver(e)} onDrop={(e)=>videoDrop(e,item?.id)}>
-      <h6>{item.categoryName}</h6>
+    <div className='d-flex justify-content-between align-items-center ' droppable onDragOver={(e)=>dragOver(e)} onDrop={(e)=>videoDrop(e,item?.id)}>
+      <h6 >{item.categoryName}</h6>
       <button onClick={()=>deleteACategory(item?.id)} className='btn btn-danger'><i class="fa-solid fa-trash-can"></i></button>
     </div>
 
-    <Row>
-      <Col>
+    <Row className='mt-2'>
+      <Col >
      {
        item?.allVideos?.length>0?
-       item?.allVideos?.map((card)=>( <VideoCard displayVideo={card}/>))
+       item?.allVideos?.map((card)=>( <VideoCard displayVideo={card} ispresent={true} setDeleteCategoryVideoStatus={setDeleteCategoryVideoStatus}/>))
        :<p>Nothing to display</p>
      }
       </Col>

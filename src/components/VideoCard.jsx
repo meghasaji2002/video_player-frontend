@@ -3,16 +3,18 @@ import Card from 'react-bootstrap/Card';
 import { useState } from 'react';
 
 import Modal from 'react-bootstrap/Modal';
-import { addToHistory, deleteVideos } from '../services/allAPI';
+import { addToHistory, deleteCategoryVideo, deleteVideos } from '../services/allAPI';
 
 
-function VideoCard({displayVideo,setDeleteVideoStatus}) {
+function VideoCard({displayVideo,setDeleteVideoStatus,ispresent,setDeleteCategoryVideoStatus}) {
     
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow =async () => {setShow(true)
-    const {caption,embedLink} = displayVideo
+    const {caption,embedLink} = displayVideo 
+
+    
 
     let today = new Date()
     console.log(today);
@@ -27,6 +29,12 @@ function VideoCard({displayVideo,setDeleteVideoStatus}) {
   const removeVideo = async(id)=>{
       const response = await deleteVideos(id)
       setDeleteVideoStatus(true)
+      console.log(response);
+  }
+
+  const removeCategoryVideo = async(id)=>{
+    const response = await deleteCategoryVideo(id)
+    setDeleteCategoryVideoStatus(true)
   }
     
 
@@ -40,12 +48,15 @@ function VideoCard({displayVideo,setDeleteVideoStatus}) {
     <div >
       
       <Card style={{ width: '100%', height:'300px' }} className='mb-3' draggable onDragStart={(e)=>cardDrag(e,displayVideo?.id)}>
-      <Card.Img variant="top" src={displayVideo.url} onClick={handleShow} />
+      <Card.Img variant="top" style={{height:'200px'}} src={displayVideo.url} onClick={handleShow} />
       <Card.Body>
         <Card.Title className='d-flex  align-items-center'>
            <h6>{displayVideo.caption}</h6>
           
-            <button onClick={()=>{removeVideo(displayVideo?.id)}} className='btn btn-danger ms-5 '><i class="fa-solid fa-trash-can"></i></button>
+           { !ispresent?
+           
+           <button onClick={()=>{removeVideo(displayVideo?.id)}} className='btn btn-danger ms-5 '><i class="fa-solid fa-trash-can"></i></button>:
+           <button onClick={()=>{removeCategoryVideo(displayVideo?.id)}}  className='btn btn-warning ms-auto '><i class="fa-solid fa-trash-can"></i></button>}
             </Card.Title>
        
       </Card.Body>
